@@ -1,5 +1,5 @@
 """
-#TODO change this comment to something describing your project
+# this is CNN
 Project 2
 
 At the end you should see something like this
@@ -32,7 +32,8 @@ normalized_image = tf.map_fn(lambda frame: tf.image.per_image_standardization(fr
 
 # DONE add conv layers here
 conv_layer_1 = tf.layers.conv2d(normalized_image, filters=32, kernel_size=(3, 3),strides=(1, 1), padding='same', activation=tf.nn.relu)
-conv_layer_2 = tf.layers.conv2d(conv_layer_1, filters=32, kernel_size=(3, 3),strides=(1, 1), padding='same', activation=tf.nn.relu)
+conv_layer_1_with_bn = tf.layers.batch_normalization(conv_layer_1, training=True)
+conv_layer_2 = tf.layers.conv2d(conv_layer_1_with_bn, filters=32, kernel_size=(3, 3),strides=(1, 1), padding='same', activation=tf.nn.relu)
 pool_layer_1 = tf.layers.max_pooling2d(conv_layer_2, pool_size=(2, 2), strides=(2, 2))
 conv_layer_3 = tf.layers.conv2d(pool_layer_1, filters=32, kernel_size=(3, 3),strides=(1, 1), padding='same', activation=tf.nn.relu)
 conv_layer_4 = tf.layers.conv2d(conv_layer_3, filters=32, kernel_size=(3, 3),strides=(1, 1), padding='same', activation=tf.nn.relu)
