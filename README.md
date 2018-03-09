@@ -1,1 +1,4 @@
-# deepLearningProject2
+# DeepLearningProject2
+
+
+![Screenshot](individualImage.png)
