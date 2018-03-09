@@ -21,7 +21,7 @@ dataUtils.deleteDirectory(TENSORBOARD_LOGDIR)
 
 ### Build tensorflow blueprint ###
 # Tensorflow placeholder
-input_placeholder = tf.placeholder(tf.float32, shape=[None, 32, 32 ,3])
+input_placeholder = tf.placeholder(tf.float32, shape=[None, 32, 32, 3])
 
 # View sample inputs in tensorboard
 tf.summary.image("input_image", input_placeholder)
@@ -37,13 +37,23 @@ normalized_image = tf.map_fn(lambda frame: tf.image.per_image_standardization(fr
 conv_layer_1 = tf.layers.conv2d(normalized_image, filters=32, kernel_size=(3, 3), strides=(1, 1), padding='same', activation=tf.nn.relu)
 conv_layer_1_with_bn = tf.layers.batch_normalization(conv_layer_1, training=True)
 conv_layer_2 = tf.layers.conv2d(conv_layer_1_with_bn, filters=50, kernel_size=(3, 3),strides=(1, 1), padding='same', activation=tf.nn.relu)
-pool_layer_1 = tf.layers.max_pooling2d(conv_layer_2, pool_size=(2, 2), strides=(2, 2))
+conv_layer_2_with_bn = tf.layers.batch_normalization(conv_layer_2, training=True)
+pool_layer_1 = tf.layers.max_pooling2d(conv_layer_2_with_bn, pool_size=(2, 2), strides=(2, 2))
 conv_layer_3 = tf.layers.conv2d(pool_layer_1, filters=80, kernel_size=(3, 3), strides=(1, 1), padding='same', activation=tf.nn.relu)
-conv_layer_4 = tf.layers.conv2d(conv_layer_3, filters=120, kernel_size=(3, 3), strides=(1, 1), padding='same', activation=tf.nn.relu)
-pool_layer_2 = tf.layers.max_pooling2d(conv_layer_4, pool_size=(2, 2), strides=(2, 2))
+conv_layer_3_with_bn = tf.layers.batch_normalization(conv_layer_3, training=True)
+conv_layer_4 = tf.layers.conv2d(conv_layer_3_with_bn, filters=120, kernel_size=(3, 3), strides=(1, 1), padding='same', activation=tf.nn.relu)
+conv_layer_4_with_bn = tf.layers.batch_normalization(conv_layer_4, training=True)
+pool_layer_2 = tf.layers.max_pooling2d(conv_layer_4_with_bn, pool_size=(2, 2), strides=(2, 2))
+conv_layer_5 = tf.layers.conv2d(pool_layer_2, filters=180, kernel_size=(3, 3), strides=(1, 1), padding='same', activation=tf.nn.relu)
+conv_layer_5_with_bn = tf.layers.batch_normalization(conv_layer_5, training=True)
+pool_layer_3 = tf.layers.max_pooling2d(conv_layer_5_with_bn, pool_size=(2, 2), strides=(2, 2))
+conv_layer_6 = tf.layers.conv2d(pool_layer_3, filters=180, kernel_size=(3, 3), strides=(1, 1), padding='same', activation=tf.nn.relu)
+conv_layer_6_with_bn = tf.layers.batch_normalization(conv_layer_6, training=True)
+pool_layer_4 = tf.layers.max_pooling2d(conv_layer_6_with_bn, pool_size=(2, 2), strides=(2, 2))
+
 
 # convert 3d image to 1d tensor (don't change batch dimension)
-flat_tensor = tf.contrib.layers.flatten(pool_layer_2)
+flat_tensor = tf.contrib.layers.flatten(pool_layer_4)
 
 # DONE improve fully connected layers
 # Neural network hidden layers
