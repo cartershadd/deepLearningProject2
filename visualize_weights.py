@@ -94,7 +94,17 @@ saver = tf.train.Saver(variables)
 
 
 # loss function
-loss = -1 * tf.reduce_mean(conv_layer_1)
+# loss = -1 * tf.reduce_mean(conv_layer_1)
+
+# Loss function to optimize for a single feature (#5) in layer 1
+feature_mask = tf.constant([[
+    [1 if feature == 5 else 0
+     for feature in range(32)]
+    for y in range(32)]
+    for x in range(32)],
+    tf.float32)
+loss = -1 * tf.reduce_mean(conv_layer_1 * feature_mask)
+
 
 # backpropagation algorithm
 # only update the weights of the feature viz image
